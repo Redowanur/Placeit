@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from models.users import ALLOWED_EMAIL_DOMAINS
+from models.user_model import ALLOWED_EMAIL_DOMAINS
 
 
 class UserCreate(BaseModel):
@@ -16,8 +16,15 @@ class UserCreate(BaseModel):
     def validate_student_email(cls, value: str) -> str:
         value = value.lower()
         if value.split("@")[-1] not in ALLOWED_EMAIL_DOMAINS:
-            raise ValueError("Use your student.sust.edu email address")
+            raise ValueError("Use your university email address.")
         return value
+    
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, value: str) -> str:
+        if not value.isdigit() or len(value) != 10:
+            raise ValueError("Invalid phone number.")
+        return '+880'+value
 
 
 class UserResponse(BaseModel):

@@ -1,2 +1,3 @@
 server/.venv
 server/folder_structure.txt
+server/.env

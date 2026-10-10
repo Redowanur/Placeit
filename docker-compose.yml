@@ -2,6 +2,7 @@ services:
   placement-portal-mongodb:
     image: mongo:7
     container_name: placement-portal-mongodb
+    restart: unless-stopped
     ports:
       - "27018:27017"
     volumes:

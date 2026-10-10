@@ -42,6 +42,7 @@ class User(Document):
     dept_id: int = Field(gt=0)
     phone: str
     user_type: UserType = UserType.STUDENT
+    is_verified: bool = False
 
     applied_companies_with_status: list[CompanyApplication] = Field(
         default_factory=list
