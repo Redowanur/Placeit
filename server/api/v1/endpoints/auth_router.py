@@ -6,9 +6,9 @@ from core.security import (
     create_access_token,
     verify_password,
 )
-from models.user_model import User
+from models.student_model import Student
 from schemas.auth import LoginRequest, TokenResponse
-from schemas.user_schema import UserResponse
+from schemas.student_schema import StudentResponse
 
 router = APIRouter()
 
@@ -21,7 +21,7 @@ async def login(data: LoginRequest):
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    user = await User.find_one(User.email == data.email)
+    user = await Student.find_one(Student.email == data.email)
 
     if user is None:
         verify_password(data.password, DUMMY_HASH)  # keep timing similar
@@ -36,9 +36,9 @@ async def login(data: LoginRequest):
     )
 
 
-@router.get("/auth/me", response_model=UserResponse)
-async def me(current_user: User = Depends(get_current_user)):
-    return UserResponse(
+@router.get("/auth/me", response_model=StudentResponse)
+async def me(current_user: Student = Depends(get_current_user)):
+    return StudentResponse(
         id=str(current_user.id),
         name=current_user.name,
         email=current_user.email,

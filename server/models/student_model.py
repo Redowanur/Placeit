@@ -5,34 +5,13 @@ from typing import Annotated
 from beanie import Document, Indexed, Replace, Save, SaveChanges, Update, before_event
 from pydantic import BaseModel, EmailStr, Field
 
-ALLOWED_EMAIL_DOMAINS = {"student.sust.edu"}
-
+from enums.user_enums import UserType
+from enums.student_enums import PlacementStatus
 
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
-
-class UserType(str, Enum):
-    STUDENT = "student"
-    RECRUITER = "recruiter"
-    ADMIN = "admin"
-
-class PlacementStatus(str, Enum):
-    NOT_APPLIED = "not_applied"
-    APPLIED = "applied"
-    WRITTEN_TEST = "written_test"
-    INTERVIEW = "interview"
-    PLACED = "placed"
-    NOT_PLACED = "not_placed"
-
-
-class CompanyApplication(BaseModel):  # embedded in User, not its own collection
-    company_id: str
-    status: PlacementStatus = PlacementStatus.APPLIED
-    applied_at: datetime = Field(default_factory=utcnow)
-
-
-class User(Document):
+class Student(Document):
     name: str = Field(min_length=2, max_length=100)
     email: Annotated[EmailStr, Indexed(unique=True)]
     reg_no: Annotated[int, Indexed(unique=True)] = Field(gt=0)
@@ -41,10 +20,7 @@ class User(Document):
     phone: str
     user_type: UserType = UserType.STUDENT
     is_verified: bool = False
-
-    applied_companies_with_status: list[CompanyApplication] = Field(
-        default_factory=list
-    )
+    placement_status: PlacementStatus = PlacementStatus.NOT_PLACED
 
     created_at: datetime = Field(default_factory=utcnow)
     updated_at: datetime = Field(default_factory=utcnow)
@@ -54,4 +30,4 @@ class User(Document):
         self.updated_at = utcnow()
 
     class Settings:
-        name = "users"
+        name = "students"

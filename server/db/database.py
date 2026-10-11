@@ -1,7 +1,11 @@
 from beanie import init_beanie
 from pymongo import AsyncMongoClient
 
-from models.user_model import User
+from models.student_model import Student
+from models.university_model import University
+from models.department_model import Department
+from models.company_model import Company
+from models.recruiter_model import Recruiter
 
 client: AsyncMongoClient | None = None
 
@@ -13,7 +17,7 @@ async def init_db():
 
     await init_beanie(
         database=client["placement_portal"],
-        document_models=[User],
+        document_models=[Student, University, Department, Company, Recruiter],
     )
 
 
