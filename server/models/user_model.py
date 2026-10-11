@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Annotated
 
-from beanie import Document, Indexed, Replace, SaveChanges, Update, before_event
+from beanie import Document, Indexed, Replace, Save, SaveChanges, Update, before_event
 from pydantic import BaseModel, EmailStr, Field
 
 ALLOWED_EMAIL_DOMAINS = {"student.sust.edu"}
@@ -14,10 +14,8 @@ def utcnow() -> datetime:
 
 class UserType(str, Enum):
     STUDENT = "student"
-    COORDINATOR = "coordinator"
+    RECRUITER = "recruiter"
     ADMIN = "admin"
-    SUPERADMIN = "superadmin"
-
 
 class PlacementStatus(str, Enum):
     NOT_APPLIED = "not_applied"
@@ -51,7 +49,7 @@ class User(Document):
     created_at: datetime = Field(default_factory=utcnow)
     updated_at: datetime = Field(default_factory=utcnow)
 
-    @before_event(Replace, SaveChanges, Update)
+    @before_event(Save, Replace, SaveChanges, Update)
     def touch_updated_at(self):
         self.updated_at = utcnow()
 

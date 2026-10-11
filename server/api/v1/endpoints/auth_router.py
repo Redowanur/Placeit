@@ -30,7 +30,10 @@ async def login(data: LoginRequest):
     if not verify_password(data.password, user.password_hash):
         raise invalid
 
-    return TokenResponse(access_token=create_access_token(str(user.id)))
+    return TokenResponse(
+        access_token=create_access_token(str(user.id)),
+        user_type=user.user_type.value
+    )
 
 
 @router.get("/auth/me", response_model=UserResponse)
