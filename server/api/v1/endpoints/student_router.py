@@ -7,6 +7,9 @@ from models.student_model import Student
 from schemas.student_schema import StudentCreate, StudentResponse, StudentUpdate
 from core.deps import get_current_user
 from enums.user_enums import UserType
+from enums.student_enums import PlacementStatus
+from models.university_model import University
+from models.department_model import Department
 
 router = APIRouter()
 
@@ -17,18 +20,13 @@ router = APIRouter()
     status_code=status.HTTP_201_CREATED,
 )
 async def create_student(student_data: StudentCreate):
-    # Friendly pre-checks (the unique indexes are the real guarantee)
-    # if await Student.find_one(Student.email == student_data.email):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_409_CONFLICT,
-    #         detail="Email is already registered",
-    #     )
-
-    # if await Student.find_one(Student.reg_no == student_data.reg_no):
-    #     raise HTTPException(
-    #         status_code=status.HTTP_409_CONFLICT,
-    #         detail="Registration number is already registered",
-    #     )
+        
+    dept = await Department.find_one({"_id": student_data.dept_id, "university_id": student_data.uni_id})
+    if not dept:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Department not found for the given university",
+        )
 
     student = Student(
         name=student_data.name,
@@ -37,7 +35,9 @@ async def create_student(student_data: StudentCreate):
         password_hash=hash_password(student_data.password),
         dept_id=student_data.dept_id,
         phone=student_data.phone,
-        user_type=UserType.STUDENT,  # role is always set server-side
+        user_type=UserType.STUDENT,
+        is_verified=False,
+        placement_status=PlacementStatus.NOT_PLACED,
     )
 
     try:
@@ -57,8 +57,11 @@ async def create_student(student_data: StudentCreate):
         dept_id=student.dept_id,
         phone=student.phone,
         user_type=student.user_type.value,
+        is_verified= False,
+        placement_status=PlacementStatus.NOT_PLACED
     )
-    
+
+
 @router.get(
     "/students/{student_id}",
     response_model=StudentResponse,

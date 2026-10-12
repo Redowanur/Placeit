@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Annotated
 
-from beanie import Document, Indexed, Replace, Save, SaveChanges, Update, before_event
+from beanie import Document, Indexed, PydanticObjectId, Replace, Save, SaveChanges, Update, before_event
 from pydantic import BaseModel, EmailStr, Field
 
 from enums.user_enums import UserType
@@ -16,7 +16,7 @@ class Student(Document):
     email: Annotated[EmailStr, Indexed(unique=True)]
     reg_no: Annotated[int, Indexed(unique=True)] = Field(gt=0)
     password_hash: str
-    dept_id: int = Field(gt=0)
+    dept_id: PydanticObjectId
     phone: str
     user_type: UserType = UserType.STUDENT
     is_verified: bool = False

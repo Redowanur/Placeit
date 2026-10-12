@@ -13,7 +13,7 @@ router = APIRouter()
 async def create_university(
     university_name: str = Query(
         ..., 
-        example="Bangladesh University of Engineering and Technology"
+        examples="Bangladesh University of Engineering and Technology"
     ),
 ):
     

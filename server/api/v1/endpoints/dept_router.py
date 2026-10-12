@@ -46,7 +46,30 @@ async def create_department(
     
     return {
         "message": "Department created successfully",
-        "department_id": str(department.id),
-        "department_name": department.name,
-        "university_name": uni.name
+        "data": {
+            "department_id": str(department.id),
+            "department_name": department.name,
+            "university_name": uni.name
+        }
     }
+    
+@router.get(
+    "/departments",
+    status_code=200,
+)
+async def get_departments():
+    departments = await Department.find_all().to_list()
+    
+    department_list=[]
+    
+    for department in departments:
+        university = await University.find_one({"_id": department.university_id})
+        
+        if university:
+            department_list.append({
+                "department_id": str(department.id),
+                "department_name": department.name,
+                "university_name": university.name
+            })
+    
+    return department_list

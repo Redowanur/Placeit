@@ -1,6 +1,8 @@
+from beanie import PydanticObjectId
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from enums.student_enums import ALLOWED_STUDENT_EMAIL_DOMAINS
+from enums.student_enums import ALLOWED_STUDENT_EMAIL_DOMAINS, PlacementStatus
+from enums.user_enums import UserType
 
 def _check_email(value: str | None) -> str | None:
     if value is None:
@@ -24,7 +26,8 @@ class StudentCreate(BaseModel):
     email: EmailStr
     reg_no: int = Field(gt=0)
     password: str = Field(min_length=8)
-    dept_id: int = Field(gt=0)
+    dept_id: PydanticObjectId
+    uni_id: PydanticObjectId
     phone: str
 
     _email = field_validator("email")(classmethod(lambda cls, v: _check_email(v)))
@@ -33,12 +36,9 @@ class StudentCreate(BaseModel):
 
 class StudentUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=2, max_length=100)
-    # email: EmailStr | None = None
-    reg_no: int | None = Field(default=None, gt=0)
-    dept_id: int | None = Field(default=None, gt=0)
     phone: str | None = None
+    placement_status: PlacementStatus | None = None
 
-    # _email = field_validator("email")(classmethod(lambda cls, v: _check_email(v)))
     _phone = field_validator("phone")(classmethod(lambda cls, v: _check_phone(v)))
 
 
@@ -47,6 +47,8 @@ class StudentResponse(BaseModel):
     name: str
     email: EmailStr
     reg_no: int
-    dept_id: int
+    dept_id: PydanticObjectId
     phone: str
-    user_type: str
+    user_type: UserType
+    is_verified: bool
+    placement_status: PlacementStatus
