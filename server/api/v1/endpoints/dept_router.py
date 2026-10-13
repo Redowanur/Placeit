@@ -5,14 +5,14 @@ from models.department_model import Department
 from models.university_model import University
 
 
-router = APIRouter()
+router = APIRouter(prefix="/departments", tags=["Department Management"])
 
 @router.post(
-    "/departments",
+    "",
     status_code=201,
 )
 async def create_department(
-    department_name: str = Query(...),
+    department_name: str = Query(..., min_length=2, max_length=100),
     university_id: PydanticObjectId = Query(...)
 ):
     uni = await University.find_one({"_id": university_id})
@@ -54,7 +54,7 @@ async def create_department(
     }
     
 @router.get(
-    "/departments",
+    "",
     status_code=200,
 )
 async def get_departments():

@@ -1,24 +1,9 @@
 from beanie import PydanticObjectId
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from enums.student_enums import ALLOWED_STUDENT_EMAIL_DOMAINS, PlacementStatus
+from enums.student_enums import PlacementStatus
 from enums.user_enums import UserType
-
-def _check_email(value: str | None) -> str | None:
-    if value is None:
-        return value
-    value = value.lower()
-    if value.split("@")[-1] not in ALLOWED_STUDENT_EMAIL_DOMAINS:
-        raise ValueError("Use your university email address.")
-    return value
-
-
-def _check_phone(value: str | None) -> str | None:
-    if value is None:
-        return value
-    if not value.isdigit() or len(value) != 10:
-        raise ValueError("Invalid phone number.")
-    return "+880" + value
+from utils.field_validators import _check_email, _check_phone
 
 
 class StudentCreate(BaseModel):

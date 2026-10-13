@@ -11,11 +11,11 @@ from enums.student_enums import PlacementStatus
 from models.university_model import University
 from models.department_model import Department
 
-router = APIRouter()
+router = APIRouter(prefix="/students", tags=["Student Management"])
 
 
 @router.post(
-    "/students",
+    "",
     response_model=StudentResponse,
     status_code=status.HTTP_201_CREATED,
 )
@@ -63,7 +63,7 @@ async def create_student(student_data: StudentCreate):
 
 
 @router.get(
-    "/students/{student_id}",
+    "/{student_id}",
     response_model=StudentResponse,
     status_code=status.HTTP_200_OK,
 )
@@ -87,7 +87,7 @@ async def get_student(student_id: PydanticObjectId):
 
 
 @router.patch(
-    "/students/{student_id}",
+    "/{student_id}",
     response_model=StudentResponse,
     status_code=status.HTTP_200_OK,
 )

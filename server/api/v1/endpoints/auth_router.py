@@ -10,10 +10,10 @@ from models.student_model import Student
 from schemas.auth import LoginRequest, TokenResponse
 from schemas.student_schema import StudentResponse
 
-router = APIRouter()
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-@router.post("/auth/login", response_model=TokenResponse)
+@router.post("/login", response_model=TokenResponse)
 async def login(data: LoginRequest):
     invalid = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -36,7 +36,7 @@ async def login(data: LoginRequest):
     )
 
 
-@router.get("/auth/me", response_model=StudentResponse)
+@router.get("/me", response_model=StudentResponse)
 async def me(current_user: Student = Depends(get_current_user)):
     return StudentResponse(
         id=str(current_user.id),

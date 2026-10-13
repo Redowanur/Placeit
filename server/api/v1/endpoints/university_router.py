@@ -4,10 +4,10 @@ from fastapi import APIRouter, HTTPException, Query, status
 from models.university_model import University
 from pymongo.errors import DuplicateKeyError
 
-router = APIRouter()
+router = APIRouter(prefix="/universities", tags=["University Management"])
 
 @router.post(
-    "/universities",
+    "",
     status_code=201,
 )
 async def create_university(
@@ -40,7 +40,7 @@ async def create_university(
     return {"message": "University created successfully"}
     
 @router.get(
-    "/universities",
+    "",
     status_code=200,
 )
 async def get_universities():
@@ -48,7 +48,7 @@ async def get_universities():
     return universities
 
 @router.get(
-    "/universities/{university_id}",
+    "/{university_id}",
     status_code=200,
 )
 async def get_university(university_id: PydanticObjectId):
