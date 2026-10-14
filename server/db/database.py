@@ -1,4 +1,7 @@
+import os
+
 from beanie import init_beanie
+from dotenv import load_dotenv
 from pymongo import AsyncMongoClient
 
 from models.student_model import Student
@@ -9,11 +12,12 @@ from models.recruiter_model import Recruiter
 
 client: AsyncMongoClient | None = None
 
+load_dotenv()
 
 async def init_db():
     global client
 
-    client = AsyncMongoClient("mongodb://localhost:27018")
+    client = AsyncMongoClient(os.getenv("MONGODB_URI"))
 
     await init_beanie(
         database=client["placement_portal"],
