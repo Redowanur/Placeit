@@ -83,6 +83,8 @@ async def get_student(student_id: PydanticObjectId):
         dept_id=student.dept_id,
         phone=student.phone,
         user_type=student.user_type.value,
+        is_verified=student.is_verified,
+        placement_status=student.placement_status.value,
     )
 
 
