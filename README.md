@@ -1,8 +1,17 @@
 # 🚀 Placeit: A Modern Campus Placement Platform
 
-Placeit is a modern, full-stack campus placement platform built with a high-performance **FastAPI** backend, a responsive **Next.js** frontend, and a flexible **MongoDB** database. This platform is designed to streamline the campus placement process, providing a seamless experience for students, universities, and recruiters.
+Placeit is a modern, full-stack campus placement platform built with a high-performance **FastAPI** backend, a responsive **Next.js** frontend, and a flexible **MongoDB** database. This platform is designed to streamline the campus placement process, providing a seamless experience for students and recruiters.
 
-<!-- --- -->
+---
+
+# Features
+
+*   **Student**
+    1. hello
+    2. hello
+*   **Recruiter**
+    1. hello
+    2. hello
 
 <!-- ## 📁 Repository Structure
 

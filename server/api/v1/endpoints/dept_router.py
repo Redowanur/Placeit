@@ -57,7 +57,32 @@ async def create_department(
     "",
     status_code=200,
 )
-async def get_departments():
+async def get_departments(
+    university_id: PydanticObjectId = Query(None)
+):
+    if university_id:
+        university = await University.find_one({"_id": university_id})
+        
+        if not university:
+            raise HTTPException(
+                status_code=404,
+                detail="University not found"
+            )
+        
+        departments = await Department.find({"university_id": university_id}).to_list()
+        
+        department_list=[]
+        
+        for department in departments:
+            department_list.append({
+                "department_id": str(department.id),
+                "department_name": department.name,
+                "university_name": university.name
+            })
+        
+        return department_list
+    
+    
     departments = await Department.find_all().to_list()
     
     department_list=[]

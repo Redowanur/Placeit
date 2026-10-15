@@ -1,3 +1,10 @@
 server/.venv
 server/folder_structure.txt
 server/.env
+
+client/node_modules
+client/.next
+client/out
+client/next-env.d.ts
+client/.env*.local
+client/*.tsbuildinfo
