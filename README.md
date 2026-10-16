@@ -4,15 +4,6 @@ Placeit is a modern, full-stack campus placement platform built with a high-perf
 
 ---
 
-# Features
-
-*   **Student**
-    1. hello
-    2. hello
-*   **Recruiter**
-    1. hello
-    2. hello
-
 <!-- ## 📁 Repository Structure
 
 ```text
