@@ -29,3 +29,19 @@ async def create_company(
             "company_name": company.name
         }
     }
+    
+@router.get("",
+    status_code=200,
+)
+async def get_companies():
+    companies = await Company.find_all().to_list()
+    
+    return {
+        "message": "Companies retrieved successfully",
+        "data": [
+            {
+                "company_id": str(company.id),
+                "company_name": company.name
+            } for company in companies
+        ]
+    }

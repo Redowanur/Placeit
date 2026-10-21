@@ -1,49 +1,36 @@
-# Dishari client (Next.js + Tailwind)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Frontend for the on-campus placement portal. Light and dark themes, built on Next.js App Router and Tailwind v4.
+## Getting Started
 
-## Run it
+First, run the development server:
 
 ```bash
-npm install
-npm run dev        # http://localhost:3000
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Put this folder in your repo as `client/`.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Try it
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-On `/login` use the two demo buttons:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- **Nusrat** (student, CSE at SUST): has a pending invite, a declined invite to retry, and a screening test to take.
-- **Rafiq** (alumni at Nodi Tech): has an invitation to accept and a connected cohort with test results to shortlist.
+## Learn More
 
-Verification code in demo mode: `123456`.
+To learn more about Next.js, take a look at the following resources:
 
-## Demo mode
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-There is no backend connection yet. `lib/store.tsx` is an in-browser database (saved to localStorage) that
-implements the rules from your brief:
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-- A student joins the cohort for their university and department, or starts it if they're first.
-- A person can't be invited twice at a time, and a declined invitation can be sent again.
-- If someone at a company is invited or has accepted, colleagues at that company are locked out of that cohort.
-- Contact numbers are masked until a verified student looks at them.
-- Verified alumni connected to a cohort can create a screening test, review scores and shortlist.
+## Deploy on Vercel
 
-To connect your FastAPI backend, replace the bodies of the actions in `lib/store.tsx` with `fetch` calls and keep the signatures.
-The pages only call those actions.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-## Customise
-
-- Name, Bangla wordmark, tagline: `lib/brand.ts`
-- Colours (both themes): top of `app/globals.css`
-- Sample data: `lib/seed.ts` (companies and people are fictional; only SUST's email domain is real)
-
-## Structure
-
-```
-app/                 pages (landing, alumni, cohorts, auth, dashboard, cohort, invitations, tests, profile)
-components/          Header, IdCard, ProgressBar, chips, guards
-lib/                 types, selectors (pure rules), store (demo backend), seed
-```
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

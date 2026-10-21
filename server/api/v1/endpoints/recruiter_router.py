@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 from schemas.recruiter_schema import RecruiterCreateRequest, RecruiterCreateResponse
 from enums.user_enums import UserType
 from models.recruiter_model import Recruiter
+from models.company_model import Company
 from core.security import hash_password
 
 router = APIRouter(prefix="/recruiter", tags=["Recruiter Management"])
@@ -12,6 +13,13 @@ router = APIRouter(prefix="/recruiter", tags=["Recruiter Management"])
     status_code=status.HTTP_201_CREATED,
 )
 async def create_recruiter(recruiter_data: RecruiterCreateRequest) -> RecruiterCreateResponse:
+    
+    company = await Company.find_one({"name": recruiter_data.company_name})
+    if not company:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Company not found",
+        )
     
     recruiter = Recruiter(
         name=recruiter_data.name,

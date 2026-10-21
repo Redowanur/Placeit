@@ -1,6 +1,13 @@
 from fastapi import APIRouter
 
-from api.v1.endpoints import auth_router, student_router, dept_router, university_router, recruiter_router, company_router
+from api.v1.endpoints import (
+    auth_router,
+    student_router,
+    dept_router,
+    university_router,
+    recruiter_router,
+    company_router,
+)
 
 api_router = APIRouter()
 
