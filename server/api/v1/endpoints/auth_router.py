@@ -1,11 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from core.deps import get_current_user
-from core.security import (
-    DUMMY_HASH,
-    create_access_token,
-    verify_password,
-)
+from core.security import create_access_token
 from enums.user_enums import UserType
 from models.recruiter_model import Recruiter
 from models.student_model import Student
