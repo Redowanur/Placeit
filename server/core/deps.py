@@ -2,12 +2,14 @@ import jwt
 from beanie import PydanticObjectId
 from bson.errors import InvalidId
 from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPAuthorizationCredentials, OAuth2PasswordBearer
 
 from core.security import decode_access_token
 from models.student_model import Student, UserType
+from models.recruiter_model import Recruiter
+from typing import Union
 
-bearer_scheme = HTTPBearer()
+bearer_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
 
 _credentials_error = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -16,19 +18,25 @@ _credentials_error = HTTPException(
 )
 
 
+
 async def get_current_user(
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
-) -> Student:
+    token: str = Depends(bearer_scheme),
+) -> Union[Student, Recruiter]:
     try:
-        payload = decode_access_token(credentials.credentials)
+        payload = decode_access_token(token)
         user_id = PydanticObjectId(payload["sub"])
     except (jwt.InvalidTokenError, KeyError, InvalidId):
         raise _credentials_error
 
     student = await Student.get(user_id)
-    if student is None:
-        raise _credentials_error
-    return student
+    if student is not None:
+        return student
+
+    recruiter = await Recruiter.get(user_id)
+    if recruiter is not None:
+        return recruiter
+
+    raise _credentials_error
 
 
 def require_roles(*roles: UserType):

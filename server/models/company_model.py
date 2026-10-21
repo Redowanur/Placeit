@@ -4,8 +4,7 @@ from typing import Annotated
 from beanie import Document, Indexed, Replace, Save, SaveChanges, Update, before_event
 from pydantic import Field
 
-def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+from utils.helpers import utcnow
 
 class Company(Document):
     name: Annotated[str, Indexed(unique=True)] = Field(min_length=5, max_length=100)

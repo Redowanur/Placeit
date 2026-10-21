@@ -3,8 +3,7 @@ from datetime import datetime, timezone
 from beanie import Document, PydanticObjectId, Replace, Save, SaveChanges, Update, before_event
 from pydantic import Field
 
-def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+from utils.helpers import utcnow
 
 class Department(Document):
     name: str = Field(min_length=2, max_length=100)

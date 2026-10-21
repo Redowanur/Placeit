@@ -3,13 +3,12 @@ from enum import Enum
 from typing import Annotated
 
 from beanie import Document, Indexed, PydanticObjectId, Replace, Save, SaveChanges, Update, before_event
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import EmailStr, Field
 
 from enums.user_enums import UserType
 from enums.student_enums import PlacementStatus
+from utils.helpers import utcnow
 
-def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
 
 class Student(Document):
     name: str = Field(min_length=2, max_length=100)

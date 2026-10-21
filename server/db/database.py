@@ -9,6 +9,7 @@ from models.university_model import University
 from models.department_model import Department
 from models.company_model import Company
 from models.recruiter_model import Recruiter
+from models.job_model import Job
 
 client: AsyncMongoClient | None = None
 
@@ -21,7 +22,7 @@ async def init_db():
 
     await init_beanie(
         database=client["placement_portal"],
-        document_models=[Student, University, Department, Company, Recruiter],
+        document_models=[Student, University, Department, Company, Recruiter, Job],
     )
 
 

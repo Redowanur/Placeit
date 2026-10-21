@@ -56,7 +56,7 @@ async def create_student(student_data: StudentCreate):
         reg_no=student.reg_no,
         dept_id=student.dept_id,
         phone=student.phone,
-        user_type=student.user_type.value,
+        user_type=student.user_type,
         is_verified= False,
         placement_status=PlacementStatus.NOT_PLACED
     )
@@ -82,9 +82,9 @@ async def get_student(student_id: PydanticObjectId):
         reg_no=student.reg_no,
         dept_id=student.dept_id,
         phone=student.phone,
-        user_type=student.user_type.value,
+        user_type=student.user_type,
         is_verified=student.is_verified,
-        placement_status=student.placement_status.value,
+        placement_status=student.placement_status,
     )
 
 
@@ -99,7 +99,7 @@ async def update_student(
     current_user: Student = Depends(get_current_user),
 ):
     is_self = current_user.id == student_id
-    is_admin = current_user.user_type in (UserType.ADMIN, UserType.SUPERADMIN)
+    is_admin = current_user.user_type in (UserType.ADMIN)
 
     if not (is_self or is_admin):
         raise HTTPException(
@@ -132,5 +132,7 @@ async def update_student(
         reg_no=student.reg_no,
         dept_id=student.dept_id,
         phone=student.phone,
-        user_type=student.user_type.value,
+        user_type=student.user_type,
+        is_verified=student.is_verified,
+        placement_status=student.placement_status,
     )
