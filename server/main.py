@@ -13,7 +13,11 @@ async def lifespan(app: FastAPI):
         await close_db()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title="Podarpon",
+    description="Campus Placement Management System",
+)
 
 app.include_router(api_router, prefix="/api/v1")
 
