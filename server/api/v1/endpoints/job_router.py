@@ -13,7 +13,6 @@ router = APIRouter(prefix="/job", tags=["Job Management"])
 
 class JobCreateRequest(BaseModel):
     title: str
-    company_name: str
     job_type: JobType
     experience: str
     salary: str
@@ -42,6 +41,7 @@ async def create_job(job: JobCreateRequest, user: Recruiter = Depends(get_curren
 
     new_job = Job(
         **job.model_dump(),
+        company_name=user.company_name,
         created_by=user.email
     )
     await new_job.insert()
