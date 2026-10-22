@@ -52,8 +52,19 @@ async def create_recruiter(recruiter_data: RecruiterCreateRequest) -> RecruiterC
         name=recruiter.name,
         email=recruiter.email,
         phone=recruiter.phone,
-        user_type=recruiter.user_type.value,
+        user_type=recruiter.user_type,
         company_name=recruiter.company_name,
         designation=recruiter.designation,
         is_verified=recruiter.is_verified,
     )
+    
+@router.get(
+    '',
+    status_code=status.HTTP_200_OK
+)
+async def list_recruiters():
+    recruiters = await Recruiter.find().to_list()
+    return {
+        "total_recruiters": len(recruiters),
+        "recruiters": recruiters
+    }
