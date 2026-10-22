@@ -8,4 +8,4 @@ client/out
 client/next-env.d.ts
 client/.env
 client/*.tsbuildinfo
-# client/ui_design
+client/ui_design
