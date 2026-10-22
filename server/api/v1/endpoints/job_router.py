@@ -9,7 +9,7 @@ from enums.user_enums import UserType
 from models.job_model import Job
 from models.recruiter_model import Recruiter
 from schemas.job_schema import JobCreateRequest, JobListProjection, JobUpdateRequest
-from utils.helpers import utcnow
+from utils.helpers import time_ago, utcnow
 
 
 router = APIRouter(prefix="/job", tags=["Job Management"])
@@ -134,6 +134,36 @@ async def list_jobs(
         "total_pages": total_pages,
         "current_page": page,
         "jobs": jobs,
+    }
+    
+@router.get(
+    "/suggestion",
+    status_code=200,
+)
+async def get_search_suggestions(
+    search_key: str = Query(..., min_length=1, max_length=100, description="Search key"),
+):
+    """Return the 10 latest jobs matching the query by title or company name."""
+    pattern = re.escape(search_key)
+    jobs = await Job.find(
+        {
+            "$or": [
+                {"title": {"$regex": pattern, "$options": "i"}},
+                {"company_name": {"$regex": pattern, "$options": "i"}},
+            ]
+        }
+    ).sort("-created_at").limit(10).to_list()
+
+    return {
+        "suggestions": [
+            {
+                "id": str(job.id),
+                "title": job.title,
+                "company_name": job.company_name,
+                "posted": time_ago(job.created_at),
+            }
+            for job in jobs
+        ]
     }
 
 

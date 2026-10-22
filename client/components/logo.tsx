@@ -14,7 +14,7 @@ export function Logo({
   return (
     <Link href={href} className={cn("inline-flex items-center gap-2.5", className)}>
       <span className="grid size-9 shrink-0 place-items-center rounded-[10px] bg-primary-500 text-white">
-        <Icon name="briefcase" className="size-[18px]" />
+        <Icon name="briefcase" className="size-4.5" />
       </span>
       <span
         className={cn(
@@ -22,7 +22,7 @@ export function Logo({
           inverted ? "text-white" : "text-heading",
         )}
       >
-        Job <span className="text-primary-400">Portal</span>
+        <span className="text-primary-400">পদার্পণ</span>
       </span>
     </Link>
   );

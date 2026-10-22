@@ -6,6 +6,6 @@ client/node_modules
 client/.next
 client/out
 client/next-env.d.ts
-client/.env*.local
+client/.env
 client/*.tsbuildinfo
-client/ui_design
+# client/ui_design

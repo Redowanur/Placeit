@@ -22,7 +22,7 @@ export function Hero() {
 
       <Container className="relative flex flex-col items-center pb-14 pt-12 text-center md:pb-20 md:pt-16 lg:pt-20">
         <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.15] tracking-tight sm:text-5xl lg:text-[56px] lg:leading-[1.1]">
-          Find Your Dream Job Today!
+          Find Your First Job Today!
         </h1>
         <p className="mt-4 max-w-xl text-sm leading-6 text-white/70 md:text-base md:leading-7">
           Connecting Talent With Opportunity: Your Gateway to Career Success
