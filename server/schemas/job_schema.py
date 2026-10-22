@@ -1,6 +1,22 @@
-from pydantic import BaseModel
+from beanie import PydanticObjectId
+from pydantic import BaseModel, ConfigDict, Field
 
 from enums.job_enums import JobType, WorkPlace
+
+
+class JobListProjection(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    id: PydanticObjectId = Field(validation_alias="_id")
+    title: str
+    company_name: str
+    job_type: JobType
+    experience: str
+    salary: str
+    office_hours: str
+    work_place: WorkPlace
+    vacancy: int
+    location: str
 
 
 class JobCreateRequest(BaseModel):

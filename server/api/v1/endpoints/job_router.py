@@ -8,7 +8,7 @@ from enums.job_enums import JobType, WorkPlace
 from enums.user_enums import UserType
 from models.job_model import Job
 from models.recruiter_model import Recruiter
-from schemas.job_schema import JobCreateRequest, JobUpdateRequest
+from schemas.job_schema import JobCreateRequest, JobListProjection, JobUpdateRequest
 from utils.helpers import utcnow
 
 
@@ -123,7 +123,7 @@ async def list_jobs(
     if created_by:
         filters.append(Job.created_by == created_by)
 
-    query = Job.find(*filters)
+    query = Job.find(*filters, projection_model=JobListProjection)
     total_jobs = await query.count()
 
     jobs = await query.skip((page - 1) * limit).limit(limit).to_list()
