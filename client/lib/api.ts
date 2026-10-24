@@ -81,6 +81,19 @@ export async function fetchCurrentUser(token: string): Promise<AuthUser> {
   return request<AuthUser>("/api/v1/auth/me", { authToken: token });
 }
 
+/** POSTs the click-token from the emailed link and flips `is_verified`. */
+export async function verifyEmail(token: string): Promise<{ message: string }> {
+  return request<{ message: string }>("/api/v1/auth/verify", {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
+}
+
+/** Best-effort: asks the backend to email the verification link after signup. */
+export async function sendVerificationEmail(token: string): Promise<void> {
+  await request("/api/v1/auth/send-verification", { method: "POST", authToken: token });
+}
+
 export type StudentSignUpPayload = {
   name: string;
   email: string;

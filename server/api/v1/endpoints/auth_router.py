@@ -1,15 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+import jwt
 
 from core.deps import get_current_user
-from core.security import create_access_token
+from core.security import (
+    create_access_token,
+    create_email_verification_token,
+    decode_token,
+    EMAIL_VERIFICATION_PURPOSE,
+)
 from enums.user_enums import UserType
 from models.recruiter_model import Recruiter
 from models.student_model import Student
-from schemas.auth import LoginRequest, TokenResponse
+from schemas.auth import LoginRequest, TokenResponse, VerifyEmailRequest
 from schemas.recruiter_schema import RecruiterCreateResponse
 from schemas.student_schema import StudentResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from services.auth_service import authenticate
+from services.email_service import send_verification_email
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -62,3 +69,52 @@ async def me(current_user: Student | Recruiter = Depends(get_current_user)):
             designation=current_user.designation,
             is_verified=current_user.is_verified
         )
+
+
+@router.post("/send-verification", status_code=status.HTTP_202_ACCEPTED)
+async def send_verification(current_user: Student | Recruiter = Depends(get_current_user)):
+    """Emails a signed verification link to the logged-in user."""
+    if current_user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Your account is already verified",
+        )
+
+    token = create_email_verification_token(str(current_user.id))
+    await send_verification_email(
+        current_user.email,
+        current_user.name,
+        current_user.user_type.value,
+        token,
+    )
+    return {"message": "Verification email sent. Check your inbox."}
+
+
+@router.post("/verify")
+async def verify_email(data: VerifyEmailRequest):
+    """Completes verification when the user clicks the emailed link."""
+    try:
+        payload = decode_token(data.token, EMAIL_VERIFICATION_PURPOSE)
+        user_id = payload["sub"]
+    except (jwt.InvalidTokenError, KeyError):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This verification link is invalid or has expired. Request a new one.",
+        )
+
+    user = await Student.get(user_id) or await Recruiter.get(user_id)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Account not found",
+        )
+
+    if not user.is_verified:
+        user.is_verified = True
+        await user.save()
+
+    return {
+        "message": "Your account has been verified successfully",
+        "user_type": user.user_type.value,
+        "email": user.email,
+    }

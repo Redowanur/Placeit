@@ -14,11 +14,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import {
-  login,
-  signUpRecruiter,
-  signUpStudent,
   fetchUniversities,
   fetchDepartments,
+  login,
+  sendVerificationEmail,
+  signUpRecruiter,
+  signUpStudent,
   type University,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -104,6 +105,12 @@ function StudentSignUpForm() {
       // Auto login after a successful registration
       const { access_token, user_type } = await login(form.email.trim(), form.password);
       await signIn(access_token, user_type);
+
+      // Fire and forget — email verification link
+      sendVerificationEmail(access_token).catch(() => {
+        // Verification can be requested again later from the app
+      });
+
       router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
@@ -280,6 +287,12 @@ function RecruiterSignUpForm() {
       // Auto login after a successful registration
       const { access_token, user_type } = await login(form.email.trim(), form.password);
       await signIn(access_token, user_type);
+
+      // Fire and forget — email verification link
+      sendVerificationEmail(access_token).catch(() => {
+        // Verification can be requested again later from the app
+      });
+
       router.push("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
